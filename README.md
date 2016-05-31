@@ -3,9 +3,10 @@ Simple Calendar Log Web App
 
 ## How to save logs from Calendar App.
   * Using REST API
-     You can save calendar log with below POST Web API
+  
+    You can save calendar log with below POST Web API:
 
-     POST http://adsl.snu.ac.kr:3300/api/labs/:labId/logs/calendars
+     POST http://adsl.snu.ac.kr:3300/api/labs/ux/logs/calendars
 
 ```
 { "logs" : [
@@ -28,7 +29,9 @@ Simple Calendar Log Web App
     * description : the detail of a schedule.
     * durationMin : the minimum time (per minutes) of a schedule
     * durationMax : the maximum time (per minutes) of a schedule
-    
+   
+  * REST API is NOT deployed yet. It's JUST for your understanding.
+  
 ## Javascript Wrapper API
 * TODO
 
