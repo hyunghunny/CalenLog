@@ -30,10 +30,71 @@ Simple Calendar Log Web App
     * durationMin : the minimum time (per minutes) of a schedule
     * durationMax : the maximum time (per minutes) of a schedule
    
-  * REST API is NOT deployed yet. It's JUST for your understanding.
+  * REST API is closely opened.
   
 ## Javascript Wrapper API
-* TODO
+* You can add the schedule with the following function.
+```
+// Add a schedule to the logs
+// CAUTION: this function depends on the allLogs global varible
+var userId = "testId";
+var allLogs = [];  // contains all the schedules 
+function addSchedule(id, dateFrom, description, durationMin, durationMax) {
+    var scheduleObj = {
+        "userId" : userId
+    };
+
+    // simple sanity check - arguments availablity only
+    if (id != null && dateFrom != null && description != null && durationMin != null && durationMax != null) {
+        scheduleObj.logId = id;
+        scheduleObj.dateFrom = dateFrom;
+        scheduleObj.description = description;
+        scheduleObj.durationMin = durationMin;
+        scheduleObj.durationMax = durationMax;
+
+        allLogs.push(scheduleObj);
+
+    } else {
+        console.log('Invalid schedule log');
+    }
+}
+```
+  * *allLogs* is a global variable which is referred in addSchedule(). it is high risky implementation to rapid coding (Frankly no head coding)
+  * *userId* is a gloval variable which identify the user of calendar app. we discuss it later.
+  * See the REST API description above to figure the arguments of addSchedule()
+  * This function depend on jQuery for ajax operation
+* You can save all schedule logs by calling the following function.
+
+```
+// Save all schedules by calling Web API
+function saveSchedules(logs, url) {
+    var postUrl = baseUrl + 'api/labs/ux/logs/calendars';
+    var payload = {};
+    payload.logs = logs;
+    console.log(JSON.stringify(payload)); // show payload to debug
+    $.ajax({
+        'url': postUrl,
+        'type': 'post',
+        'contentType': "application/json",
+        'dataType': 'json',
+        'statusCode': {
+            '202': function (data) {
+                alert('The message is posted successfully');
+                updateMessages();
+            }
+        },
+        'data': JSON.stringify(payload)
+    });
+}
+```
+* *logs* argument requires the all schedule logs (which is the global variable *allLogs* above)
+* *url" requries 'http://147.47.123.199:3300/'
 
 ## Sample code
-* TODO
+* You can simply add the schdules and save them as follows:
+```
+addSchedule("test01", (new Date("2016-6-1 10:30")).getTime(), "ICST presentation", 75, 90);
+addSchedule("test02", (new Date("2016-6-3 10:30")).getTime(), "IDA lecture", 150, 200);
+
+saveSchedules(allLogs, baseUrl);
+```
