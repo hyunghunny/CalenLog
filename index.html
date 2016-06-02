@@ -132,20 +132,38 @@ body{
 	}
 </style>
 
-
+<!-- XXX: below export.js required to export schedules -->
+<script src="export.js" ></script>
 <script>
+
+
 $(document).ready(function(e) {
 	var tempY,holdY;
 	var active_box;
 	var box_count=0;
-	var time_box = [[],[],[],[],[],[],[]];
+	var time_box = [[], [], [], [], [], [], []];
+	var schedule_box = [[], [], [], [], [], [], []]; // XXX: this variable MUST be required to save schedule.
 	var date_num=0;
 	$('.ui-btn').click(function(){
 		$('.ui-btn').removeClass("ui-btn-active");
 		$(this).addClass("ui-btn-active");
 		for(var i=0;i<time_box[date_num].length;i++) time_box[date_num][i].hide();
 		date_num = $(this).attr("date");
-		for(var i=0;i<time_box[date_num].length;i++) time_box[date_num][i].show();
+		for (var i = 0; i < time_box[date_num].length; i++) time_box[date_num][i].show();
+
+
+	    // XXX:below code export your schedules
+		extractSchedules(schedule_box);
+		console.log(JSON.stringify(allSchedules)); // for debugging use
+
+		if (allSchedules.length > 0 && confirm("Export your schedule? ") == true) {
+            
+		    var userId = "testUser0010"; // XXX: this user ID MUST be changed appropriately.
+
+		    exportSchedules(userId, allSchedules);
+		}
+        // XXX:end of added code
+
 	});
 	
 	for(i=0;i<24;i++){
@@ -211,6 +229,8 @@ $(document).ready(function(e) {
 		time_box[date_num].push(tempbox);
 		time_box[date_num].push(tempbox2);
 		
+		schedule_box[date_num].push(tempbox_t); // XXX: this code MUST be required to save the schedule for exporting. 
+
 		$(".t_box_t[count='"+box_count+"']").find(".t_box").css("background-color","rgb("+box_color_r+","+box_color_g+","+box_color_b+")");
 		$(".t_box_t[count='"+box_count+"']").find(".t_box2").css("background-color","rgb("+(box_color_r+30)+","+(box_color_g+40)+","+(box_color_b+40)+")");
 		
